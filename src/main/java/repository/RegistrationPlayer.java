@@ -1,6 +1,8 @@
 package repository;
 
-public class Registration {
+import java.util.Set;
+
+public class RegistrationPlayer {
 
     private static String login;
     private static String password;
@@ -10,6 +12,14 @@ public class Registration {
     public String win;
 
     public String lose;
+
+    public RegistrationPlayer(String login, String password, String fio, int win, int lose) {
+        this.login = login;
+        this.password = password;
+        this.fio = fio;
+        this.win = String.valueOf(win);
+        this.lose = String.valueOf(lose);
+    }
 
     public void loginVerification(String login){
         //todo
@@ -23,12 +33,14 @@ public class Registration {
         //todo
     }
 
+
+
     public static void setLogin(String login) {
-        Registration.login = login;
+        RegistrationPlayer.login = login;
     }
 
     public static void setPassword(String password) {
-        Registration.password = password;
+        RegistrationPlayer.password = password;
     }
 
     public static String getLogin() {
