@@ -13,7 +13,7 @@ public class ApplDataSource {
         ds = new PGSimpleDataSource();
 
         ds.setServerNames(new String[]{"localhost:5432"});
-        ds.setDatabaseName("players");
+        ds.setDatabaseName("postgres");
         ds.setUser("postgres");
         ds.setPassword("root");
 
