@@ -1,22 +1,22 @@
 package repository;
 
-import DataSource.ApplDataSource;
 import DataSource.Data;
 
-import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+
 
 public class RegistrationPlayer {
 
-    private static String login;
-    private static String password;
+    private String login;
+    private String password;
 
-    public static String fio;
+    public String fio;
 
-    public String win;
-
-    public String lose;
+    public int win;
+    public int lose;
 
     private RegistrationPlayer findLogin(String login, List<RegistrationPlayer> players){
         for (var p: players){
@@ -31,8 +31,8 @@ public class RegistrationPlayer {
         this.login = login;
         this.password = password;
         this.fio = fio;
-        this.win = String.valueOf(win);
-        this.lose = String.valueOf(lose);
+        this.win = win;
+        this.lose = lose;
     }
 
     public RegistrationPlayer() {
@@ -45,52 +45,71 @@ public class RegistrationPlayer {
         List<RegistrationPlayer> players = data.dataList();
         String log, pas;
         Scanner s = new Scanner(System.in);
-        System.out.println("Введите логин: ");
+        System.out.println("Enter login: ");
         log = s.nextLine();
-        System.out.println("Введите пароль: ");
+        System.out.println("Enter password: ");
         pas = s.nextLine();
         RegistrationPlayer player = findLogin(log, players);
-        if (log.equals(player.login) && pas.equals(player.password)){
-            Player player1 = new Player(player.fio, player.win, player.lose);
-            return player1;
-        }
-        else {
-            System.out.println("Вас нет в системе. Регистраниция: ");
-            System.out.println("Введите fio: ");
+
+        if (player == null){
+            System.out.println("You are not in the system. Registerpage: ");
+            System.out.println("Enter fio: ");
             String fio = s.nextLine();
             data.addPlayer(log, pas, fio);
-            System.out.println("Вы зарегестрированны: ");
+            System.out.println("You are registered. ");
             pl.loginVerification();
+            //todo retur n
+        }
+        else if (log.equals(player.login) && pas.equals(player.password)){
+            Player pla = new Player(player.fio, player.win, player.lose);
+            return pla;
         }
 
         return null;
     }
 
-    public void viewLiders(){
-        //todo sort
+    public void viewLiders(String command){
         Data data = new Data();
         List<RegistrationPlayer> players = data.dataList();
+        
+        boolean isNeededWins = false, isNeededLoses = false;
+        
+        if (command.equals("-w"))
+            isNeededWins = true;
+        else if (command.equals("-l"))
+            isNeededLoses = true;
+
+        if (isNeededWins) {
+            players= players.stream()
+                    .sorted(Comparator.comparingInt(RegistrationPlayer::getWin).reversed())
+                    .collect(Collectors.toList());
+        }
+
+        if (isNeededLoses) {
+            players= players.stream()
+                    .sorted(Comparator.comparingInt(RegistrationPlayer::getLose).reversed())
+                    .collect(Collectors.toList());
+        }
 
         for(var g: players){
             System.out.println("Fio: " + g.fio + " Win: " + g.win + " Lose: " + g.lose);
         }
     }
 
-
-
-    public static void setLogin(String login) {
-        RegistrationPlayer.login = login;
+    public int getWin() {
+        return win;
     }
 
-    public static void setPassword(String password) {
-        RegistrationPlayer.password = password;
+    public int getLose() {
+        return lose;
     }
 
-    public static String getLogin() {
+    public String getLogin() {
         return login;
     }
 
-    public static String getPassword() {
+    public String getPassword() {
         return password;
     }
+
 }

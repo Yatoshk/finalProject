@@ -4,7 +4,7 @@ public class Game {
 
     RegistrationPlayer pl = new RegistrationPlayer();
     Player player1 = pl.loginVerification();
-    //Player player2 = pl.loginVerification();
+    Player player2 = pl.loginVerification();
 
     //вывод данных двух игроков
     public void  startGame() {

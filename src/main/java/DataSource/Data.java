@@ -1,6 +1,5 @@
 package DataSource;
 
-import repository.Player;
 import repository.RegistrationPlayer;
 
 import java.sql.ResultSet;
@@ -40,6 +39,12 @@ public class Data {
         return players;
     }
 
+    public List<RegistrationPlayer> dataList(){
+        Data data = new Data();
+        List<RegistrationPlayer> players = data.findAll().stream().toList();
+        return players;
+    }
+
     public void addPlayer(String log, String pas, String fio){
         try (var st = ApplDataSource.getConnection().prepareStatement("insert into postgres values( '" + log + "', '" + pas + "', '" + fio + "' ) ")){
             int n = st.executeUpdate();  // выполнить UPDATE запрос
@@ -50,9 +55,4 @@ public class Data {
         }
     }
 
-    public List<RegistrationPlayer> dataList(){
-        Data data = new Data();
-        List<RegistrationPlayer> players = data.findAll().stream().toList();
-        return players;
-    }
 }

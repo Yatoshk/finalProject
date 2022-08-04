@@ -3,10 +3,10 @@ package repository;
 public class Player {
 
     private String fio;
-    private String win;
-    private String lose;
+    public int win;
+    public int lose;
 
-    public Player(String fio, String win, String lose) {
+    public Player(String fio, int win, int lose) {
         this.fio = fio;
         this.win = win;
         this.lose = lose;
@@ -16,7 +16,7 @@ public class Player {
     }
 
     public void view(Player p){
-        System.out.println("Фио: " + p.getFio() + " Победы: " + p.getWin() + " Поражения: " + p.getLose());
+        System.out.println("Fio: " + p.getFio() + " Wins: " + p.win + " Loses: " + p.lose);
     }
     //очередь хода 0 - доступен ход 1 - ход противника
     //выбор клетки
@@ -24,12 +24,13 @@ public class Player {
     public String getFio() {
         return fio;
     }
-
-    public String getWin() {
+    /*
+    public int getWin() {
         return win;
     }
 
-    public String getLose() {
+    public int getLose() {
         return lose;
     }
+    */
 }
