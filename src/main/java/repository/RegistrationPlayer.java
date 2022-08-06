@@ -57,14 +57,11 @@ public class RegistrationPlayer {
             String fio = s.nextLine();
             data.addPlayer(log, pas, fio);
             System.out.println("You are registered. ");
-            pl.loginVerification();
-            //todo retur n
         }
         else if (log.equals(player.login) && pas.equals(player.password)){
             Player pla = new Player(player.fio, player.win, player.lose);
             return pla;
         }
-
         return null;
     }
 

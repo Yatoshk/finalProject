@@ -6,6 +6,9 @@ public class Player {
     public int win;
     public int lose;
 
+    public int turn;
+    public String move;
+
     public Player(String fio, int win, int lose) {
         this.fio = fio;
         this.win = win;
@@ -18,19 +21,17 @@ public class Player {
     public void view(Player p){
         System.out.println("Fio: " + p.getFio() + " Wins: " + p.win + " Loses: " + p.lose);
     }
-    //очередь хода 0 - доступен ход 1 - ход противника
+
+    public void swapTurn(){
+        if (this.turn == 0)
+            this.turn = 1;
+        else
+            this.turn = 0;
+    }
+
     //выбор клетки
 
     public String getFio() {
         return fio;
     }
-    /*
-    public int getWin() {
-        return win;
-    }
-
-    public int getLose() {
-        return lose;
-    }
-    */
 }
