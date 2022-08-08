@@ -64,7 +64,7 @@ public class RegistrationPlayer {
         }
         return null;
     }
-
+    //"" - list "-w" - list sorted by wins "-l" - list sorted by loses
     public void viewLiders(String command){
         Data data = new Data();
         List<RegistrationPlayer> players = data.dataList();

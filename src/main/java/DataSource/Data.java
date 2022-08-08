@@ -1,5 +1,6 @@
 package DataSource;
 
+import repository.Player;
 import repository.RegistrationPlayer;
 
 import java.sql.ResultSet;
@@ -52,6 +53,27 @@ public class Data {
         catch(SQLException ex){
             System.out.println("Connection failed...");
             System.out.println(ex);
+        }
+    }
+
+    public void updateData(Player player, int i){
+        if (i == 1){
+            try (var st = ApplDataSource.getConnection().prepareStatement("update postgres set win = win + 1 where fio = '" + player.getFio() + "'")){
+                int n = st.executeUpdate();  // выполнить UPDATE запрос
+            }
+            catch(SQLException ex){
+                System.out.println("Connection failed...");
+                System.out.println(ex);
+            }
+        }
+        else {
+            try (var st = ApplDataSource.getConnection().prepareStatement("update postgres set lose = lose + 1 where fio = '" + player.getFio() + "'")){
+                int n = st.executeUpdate();  // выполнить UPDATE запрос
+            }
+            catch(SQLException ex){
+                System.out.println("Connection failed...");
+                System.out.println(ex);
+            }
         }
     }
 
