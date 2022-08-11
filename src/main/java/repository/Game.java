@@ -3,6 +3,7 @@ package repository;
 import DataSource.Data;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -14,8 +15,7 @@ public class Game {
     RegistrationPlayer pl = new RegistrationPlayer();
     Player player1 = pl.loginVerification();
     Player player2 = pl.loginVerification();
-
-    //todo структура данных хранящая шаги игры для продолжения после перезапуска
+    List<SaveGame> listOldGames = d.dataListGame();
 
     public void  startGame() {
 
@@ -31,6 +31,8 @@ public class Game {
             }
         }
 
+        int count = 0;
+
         System.out.println("         ");
         if (player1 == null) {
             player1 = pl.loginVerification();
@@ -44,31 +46,57 @@ public class Game {
         player1.view(player1);
         player2.view(player2);
 
-        System.out.println("Turn player 1: ");
-        System.out.println("0. - first and o ");
-        System.out.println("1. - second and x");
-        int turn;
-        Scanner s = new Scanner(System.in);
-        turn = s.nextInt();
-        if (turn == 0){
-            player1.sign = "o";
-            player2.sign = "x";
-            System.out.println("Turn player 1 == o, player 2 == x. ");
-        }
-        else if (turn == 1){
-            player1.sign = "x";
-            player2.sign = "o";
-            System.out.println("Turn player 1 == x, player 2 == o. ");
-        }
+        boolean contGame = false;
 
-        System.out.println("choice of moves:");
-        System.out.println(" a1  | a2 |  a3");
-        System.out.println(" ---------------");
-        System.out.println(" b1  | b2 |  b3");
-        System.out.println(" ---------------");
-        System.out.println(" c1  | c2 |  c3");
+        if (findOldGame(player1.getFio(), player2.getFio(), listOldGames)){
+            System.out.println("Do you want to continue the old game? (y/n)");
+            Scanner ans = new Scanner(System.in);
+            String answer = ans.nextLine();
+
+            //todo при продолжении игры ошибки: 1. нужно вывести все шаги которые уже использовались + доступные 2. выбираются использованные шаги
+
+
+            if (answer.equals("y")){
+                contGame = true;
+                for (var v: availableMoves){
+                    if(listOldGames.contains(v)){
+                        count++;
+                        availableMoves.remove(v);
+                    }
+                }
+            }
+            else if (answer.equals("n"))
+                d.deleteOldGame(player1.getFio(), player2.getFio());
+        }
+        if(!contGame) {
+            System.out.println("Turn player 1: ");
+            System.out.println("0. - first and o ");
+            System.out.println("1. - second and x");
+            int turn;
+            Scanner s = new Scanner(System.in);
+            turn = s.nextInt();
+            if (turn == 0){
+                player1.sign = "o";
+                player2.sign = "x";
+                System.out.println("Turn player 1 == o, player 2 == x. ");
+            }
+            else if (turn == 1){
+                player1.sign = "x";
+                player2.sign = "o";
+                System.out.println("Turn player 1 == x, player 2 == o. ");
+            }
+
+            d.addGame(player1.getFio(), player2.getFio(), player1.sign, player2.sign);
+
+            System.out.println("choice of moves:");
+            System.out.println(" a1  | a2 |  a3");
+            System.out.println(" ---------------");
+            System.out.println(" b1  | b2 |  b3");
+            System.out.println(" ---------------");
+            System.out.println(" c1  | c2 |  c3");
+        }
         boolean check;
-        int flag, count = 0;
+        int flag;
         String m1, m2;
         Scanner s1 = new Scanner(System.in);
         Scanner s2 = new Scanner(System.in);
@@ -111,12 +139,15 @@ public class Game {
                 d.updateData(player2, 1);
             }
         }
+        d.deleteOldGame(player1.getFio(), player2.getFio());
 
         System.out.println("Update data all players: ");
         pl.viewLiders("");
     }
 
     private boolean  checkingMoves(Player player, char[][] playingField, int c){
+
+        d.addGameMove(player.move, player1.getFio(), player2.getFio());
         char t;
         if(Objects.equals(player.sign, "o"))
             t = 'o';
@@ -201,8 +232,16 @@ public class Game {
         }
         return false;
     }
-    //вывод каждого хода + сохранение промежуточных результатов(после рестарта и рег тех же игроков
-    // будет выбор продолжить игру или закончить ее)
 
-
+    private boolean findOldGame(String fio1, String fio2, List<SaveGame> list){
+        for (var v: list){
+            if (fio1.equals(v.fio1) && fio2.equals(v.fio2))
+            {
+                player1.sign = v.sign1;
+                player2.sign = v.sign2;
+                return true;
+            }
+        }
+        return false;
+    }
 }
